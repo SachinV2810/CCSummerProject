@@ -3,30 +3,59 @@ import { useFirebase } from "../../firebase"
 import { sendPasswordResetEmail } from "firebase/auth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
+import LinearProgress from '@mui/material/LinearProgress';
 import { Link } from "react-router-dom";
+import axios from "../../axios";
 const HandlePass=()=>{
     const [email,setEmail]=useState("");
     const [err,setErr]=useState("");
     const [sent,setsent]=useState(false);
+    const [loader,setloader]=useState(false);
     const firebase=useFirebase();
     const handleChange=(e)=>{
+      setErr("");
         setEmail(e.target.value);
     }
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
+      setloader(true);
         e.preventDefault();
-        sendPasswordResetEmail(firebase.firebaseAuth,email,{
+        const res=await axios.get("/allusers",{
+          headers:{
+            'Content-Type':'application/json',
+          },
+          withCredentials:true
+        })
+        if(res){
+          const users=res.data;
+          const found=users.some(user=>user.email===email);
+            if(found){
+              sendPasswordResetEmail(firebase.firebaseAuth,email,{
             url:"http://localhost:3000/login"
         })
         .then((res)=>{
             setsent(true);
+            setloader(false);
+    
         })
         .catch(err=>{
             setErr(err);
+            setloader(false);
         })
-    }
+            }
+            else{
+              setloader(false);
+              setErr("user is not registered with us !");
+            }
+          }
+          
+        }
+        
+    
     // sendPasswordResetEmail(firebase.firebaseAuth,email);
 
     return(
+      <>
+         {loader && <LinearProgress color="secondary" className="w-full h-2"/>}
          <div style={{backgroundImage:"url('./login.jpg')"}} className="w-full h-screen bg-cover flex justify-center items-center flex-wrap ">
       {err.length===0?"":<div className="w-96 h-8 bg-red-700 absolute top-40 text-white text-center rounded pt-1"><FontAwesomeIcon icon={faXmarkCircle} className="mr-2"/>{err.toLocaleUpperCase()}</div>}
         <div className="h-80 w-96 bg-white/75  text-center flex flex-wrap justify-center items-center">
@@ -55,6 +84,7 @@ const HandlePass=()=>{
         </div>
 
     </div>
+    </>
     )
 } 
 
