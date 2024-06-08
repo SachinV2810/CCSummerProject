@@ -3,11 +3,12 @@ const express = require('express');
 const app=express();
 const cors=require('cors');
 const bodyParser=require('body-parser')
+const dbURL=process.env.ATLAS_URL;
 corsOptions ={
     origin:'http://localhost:3000', 
-        credentials:true,            //access-control-allow-credentials:true
+        withcredentials:true,            //access-control-allow-credentials:true
         optionSuccessStatus:200,
-        methods:["POST","GET","DELETE"]
+        methods:["POST","GET","DELETE"],
     }
 const {isLoggedIn,isAdmin} =require('./middlewares/isAuth');
 const mongoose = require('mongoose');
@@ -18,7 +19,8 @@ const paymentRouter=require("./routes/payment");
 main(
     console.log("connection succeed")
 ).catch(err => console.log(err));
-const dbURL=process.env.ATLAS_URL;
+
+
 async function main() {
   await mongoose.connect(dbURL);
 }

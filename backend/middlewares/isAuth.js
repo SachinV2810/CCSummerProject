@@ -6,7 +6,6 @@ const isLoggedIn=async(req,res,next)=>{
             const token=req.headers.authorization.split(' ')[1];
             const decodeValue=await admin.auth().verifyIdToken(token);
             if(decodeValue){
-
                     return res.json({msg:"normaluser"});
                 next();
             }
