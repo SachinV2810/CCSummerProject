@@ -1,5 +1,5 @@
 
-const admin = require('../config/firebase-config');
+const admin=require("../config/firebaseadmin.js");
 const User =require('../models/user');
 const isLoggedIn=async(req,res,next)=>{
         try{
@@ -17,4 +17,39 @@ const isLoggedIn=async(req,res,next)=>{
 
 }
 
-module.exports={isLoggedIn};
+const adminAuthMiddleware = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ msg: "Authorization token is missing" });
+        }
+
+        const decodeValue = await admin.auth().verifyIdToken(token);
+        if (decodeValue.email !== process.env.ADMIN_EMAIL) {
+            return res.status(401).json({ msg: "User not authorized" });
+        }
+        next();
+    } catch (err) {
+        res.status(500).json({ msg: "Internal server error ", error: err.message });
+    }
+};
+
+
+const isauthMiddleware = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ msg: "Authorization token is missing" });
+        }
+        const decodeValue = await admin.auth().verifyIdToken(token);
+        
+        if (!decodeValue) {
+            return res.status(401).json({ msg: "User not authorized" });
+        }
+        next();
+    } catch (err) {
+        res.status(500).json({ msg: "Internal server error ", error: err.message });
+    }
+};
+
+module.exports={isLoggedIn,adminAuthMiddleware,isauthMiddleware};

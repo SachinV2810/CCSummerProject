@@ -1,0 +1,117 @@
+.flight-card {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.flight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: blueviolet;
+  color: #fff;
+}
+
+.flight-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.flight-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.flight-title {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.flight-title h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.flight-title p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.manage-booking {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.flight-details {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.departure,
+.arrival {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.departure h3,
+.arrival h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.departure p,
+.arrival p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.airline {
+  display: flex;
+  align-items: center;
+}
+
+.airline h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.airline-logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.airline-logo img {
+  width: 24px;
+  height: 24px;
+}
+
+.airline p {
+  font-size: 14px;
+  margin: 0;
+}

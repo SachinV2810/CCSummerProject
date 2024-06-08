@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../axios";
 import { useEffect, useState } from "react";
 
@@ -9,11 +9,11 @@ import TravellerDetails from "./TravellerDetails";
 
 const BookingPart2 = () => {
     const {id1,id2,adult,child}=useParams();
-  
+    const navigate=useNavigate();
     const [flight1,setflight1]=useState({})
     const [flight2,setflight2]=useState({})
     const getFlight1=()=>{
-        axios.get(`/getbreview/${id1}/`,{
+        axios.get(`/users/getbreview/${id1}/`,{
             headers:{
                 'Content-Type':'application/json'
             },
@@ -22,9 +22,13 @@ const BookingPart2 = () => {
         .then((res)=>{
             setflight1(res.data);
         })
+        .catch(err=>{
+            console.log(err);
+            navigate("/flights/result");
+    });
     }
     const getFlight2=()=>{
-        axios.get(`/getbreview/${id2}`,{
+        axios.get(`/users/getbreview/${id2}`,{
             headers:{
                 'Content-Type':'application/json'
             },
@@ -33,6 +37,10 @@ const BookingPart2 = () => {
         .then((res)=>{
             setflight2(res.data);
         })
+        .catch(err=>{
+            console.log(err);
+            navigate("/flights/result");
+    });
     }
     
     useEffect(()=>{

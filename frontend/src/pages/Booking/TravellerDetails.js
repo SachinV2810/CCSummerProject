@@ -4,6 +4,7 @@ import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ToastContainer, toast } from 'react-toastify';
 const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
      const [open, setOpen] = useState(false);
     const handleClose = () => {
@@ -56,22 +57,22 @@ const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
     }
     console.log(option.amount);
      if (validateInputs()) {
-            const res=await axios.post("/getorderid",option,{
+            const res=await axios.post("/payment/getorderid",option,{
                 headers:{
                     'Content-Type':'application/json'
                 },
                 withCredentials:true
             }) 
             var options = {
-                "key": 'rzp_test_B29wyl4OKbFZhM', 
+                "key": process.env.REACT_APP_RAZORPAY_KEY_ID, 
                 "amount": res.data.amount_due, 
                 "currency": option.currency,
-                "name": "FastFour Air", 
+                "name": "FastANDair", 
                 "description": "Test Transaction",
                 "order_id": res.data.id, 
                 "handler": async function (response){
                     const body={...response};
-                    const validateRes=await axios.post("/validatePayment",body,{
+                    const validateRes=await axios.post("/payment/validatePayment",body,{
                         headers:{
                             'Content-Type':'application/json'
                         },
@@ -80,7 +81,6 @@ const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
                     if(validateRes.data.msg==='success'){
                         window.localStorage.setItem('travelBody',JSON.stringify([adultData,childData,option,contactInfo]));
                         flight2?navigate(`/booking/${flight1._id}/${flight2._id}/${validateRes.data.orderId}/${validateRes.data.paymentId}`,{replace:true}):
-                        
                         navigate(`/booking/${flight1._id}/${validateRes.data.orderId}/${validateRes.data.paymentId}`,{replace:true});
                     }
                 },
@@ -98,14 +98,11 @@ const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
                 }
 };
 var rzp1 = new window.Razorpay(options);
+// 
 rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
+       toast.error(response.error.description,{
+        position:'top-center'
+       })
 });
     rzp1.open();
       
@@ -221,6 +218,7 @@ rzp1.on('payment.failed', function (response){
         </div>
         
       </Backdrop>
+      <ToastContainer/>
     </div>
   );
 };

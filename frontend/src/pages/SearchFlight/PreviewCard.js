@@ -53,7 +53,7 @@ const PreviewCard = () => {
           console.log("Not Able to book more than 9 people")
         }
         else{
-             axios.post("/searchresults",obj, {
+             axios.post("/users/searchresults",obj, {
             headers: {
           'Content-Type': 'application/json',
           'Authorization': firebase.token
@@ -71,12 +71,12 @@ const PreviewCard = () => {
         }
     }
     const getcities=()=>{
-        axios.get("/getcities",{
+        axios.get("/users/getcities",{
             headers:{
                 'Content-Type':'application/json'
             },
             withCredentials:true
-        }).then((res)=>{
+          }).then((res)=>{
             setcities(res.data);
         }).catch(err=>{
                 console.log(err);

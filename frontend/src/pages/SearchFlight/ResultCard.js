@@ -1,53 +1,76 @@
 import { useState } from "react";
 import ResultCard2 from "./ResultCard2";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import ReviewsCard from "./ReviewsCard";
 const ResultCard = ({flightdata,a,c,w}) => {
-    function extractDateTimeParts(date) {
-            console.log(date);
-            const datePart = date.slice(0, 10); // Extracts "YYYY-MM-DD"
-            const timePart = date.slice(11, 16); // Extracts "HH:mm"
-            return { date: datePart, time: timePart };
-            }
-    const departedPart=extractDateTimeParts(flightdata.departureDateTime)
-    const arrivalPart=extractDateTimeParts(flightdata.arrivalDateTime);
+    function formatISODate(isoDate) {
+            const date = new Date(isoDate);
+                const options = {hour: 'numeric', minute: 'numeric',hour12:false };
+            return date.toLocaleString('en-US', options);
+    }
+    function getTimeDifference(date1, date2) {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+        const diffMs = Math.abs(d2 - d1);
+
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        
+        return `${diffHours}h${diffMinutes}m`;
+}
+
+    const date=new Date();
     const navigate=useNavigate();
     const [hideMore,sethideMore]=useState(false);
+    const [hideReviews,sethideReviews]=useState(false);
     const handleReview=()=>{
         navigate(`/flights/review/${flightdata._id}/${a}/${c}`);
     }
   return (
-    <div className={hideMore? "w-full flex mb-60  md:mb-48 ease-in-out duration-200":"w-full mb-10 flex  "}>
-    <div className="bg-white shadow-lg border-2 shadow-blue-500/50 w-80 md:w-2/3 h-64 md:h-36  pl-4 pr-4">
-        <p className="font-medium">{flightdata.airline}</p>
-        <div className="flex flex-wrap justify-between items-center">
-            <div className="w-full md:w-20">
-                <p>{flightdata.departureAirport}</p>
-                <p className="font-bold text-xl">{departedPart.time}</p>
-            </div>
-            <div className="self-end"> 
-                <p className="font-bold text-lg">{Math.abs(Number(departedPart.time.split(':')[0])-Number(arrivalPart.time.split(':')[0]))}h{Math.abs(Number(departedPart.time.split(':')[1])-Number(arrivalPart.time.split(':')[1]))}m</p>
-            </div>
-            <div className="w-full md:w-20">
-                <p>{flightdata.arrivalAirport}</p>
-                <p className="font-bold text-xl">{arrivalPart.time}</p>
-            </div>
-            <div className="font-semibold text-lg self-end w-full md:w-12">&#8377;{flightdata.price}</div>
-           {w==='oneway' && <button className='bg-orange-400 w-28 h-6 text-white font-bold text-md rounded-md hover:bg-orange-500' onClick={handleReview}>Book</button>
-            }
+    <div className="flex flex-wrap justify-center w-1/2 shadow-lg shadow-blue-300 border-2 border-yellow-300  mb-16">
+        <div className="w-full pl-24">
+            <span className="mr-2">{flightdata.airline}</span>
+            <span>{flightdata.flightNumber}</span>
         </div>
-        <div className="justify-between w-full mt-4 flex">
-            <div>
-                <Rating name="read-only" value={2} readOnly />
+        <div className="flex w-4/5 items-center justify-around">
+            <div className="flex flex-col">
+                <span className="m">{flightdata.departureAirport}</span>
+                <span className="font-semibold text-xl">{formatISODate(flightdata.departureDateTime)}</span>
             </div>
-            <button onClick={()=>sethideMore(!hideMore)}>Read more</button>
+            <div >
+                <span className="font-medium">{getTimeDifference(flightdata.departureDateTime,flightdata.arrivalDateTime)}</span>
+            </div>
+            <div className="flex flex-col">
+                <span className="m">{flightdata.arrivalAirport}</span>
+                <span className="font-semibold text-xl">{formatISODate(flightdata.arrivalDateTime)}</span>
+            </div>
+            <div >
+                <span className="font-semibold text-xl">&#8377;{flightdata.price.toLocaleString("en-IN")}</span>
+            </div>
+            <div >
+                <button className="bg-orange-400 w-20 text-white font-bold rounded-md" onClick={handleReview}>Book</button>
+            </div>
         </div>
-        
+        <div className="w-full flex justify-end pr-24">
+            <span className="text-blue-700 cursor-pointer" onClick={()=>sethideReviews(!hideReviews)}>Read Reviews</span>
+        </div>
+        {hideReviews && 
+        <div className="w-full  overflow-y-scroll h-40 overflow-x-hidden border-2 mt-4 pb-4 flex flex-wrap ">
+            {flightdata.reviews.map((review)=>{
+                return <div key={review._id} className="w-full mt-1">
+                    <div className="w-full ml-20">
+                        <Rating value={review.rating} size="small"></Rating>
+                    </div>
+                    <div className="w-full ml-20">
+                        <p className="italic">{review.comment} </p>
+                    </div>
+                </div>
+            })}
+            
+        </div>}
     </div>
-        <ResultCard2 value={hideMore} flightdata={flightdata}/>
-    </div>
-  )
+  );
 };
 
 export default ResultCard;

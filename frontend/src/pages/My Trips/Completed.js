@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
-import axios from "../../axios";
-import BookingSuccFlightPrev from "../Booking/BookingSuccFlightPrev";
-import Header from "../extras/Header";
+import { useState,useEffect } from "react";
 import { useFirebase } from "../../firebase";
-import UpcomingCard from "./UpcomingCard";
-
-const Upcoming = () => {
+import axios from "../../axios";
+import CompletedCard from "./CompletedCard";
+const Completed = () => {
     const [trips,setTrips]=useState([]);
     const firebase=useFirebase();
     const user=firebase.user;
     const getTrips=()=>{
-        axios.get("/users/getupcomingtrips",{
+        axios.get("/users/getcompTrips",{
             headers:{
                 'Content-Type':'application/json',
                 'Authorization':user.uid
@@ -26,15 +23,17 @@ const Upcoming = () => {
         getTrips();
     },[])
   return (
-    <div className="pt-20 relative top-44 ">
-        {trips.length!==0?<p className="text-center font-bold text-2xl">Upcoming Trips</p>:<p className="text-center font-bold text-2xl">No Upcoming Trips</p>}
+    <div className="pt-20 relative top-44 flex flex-wrap justify-center ">
+        {trips.length!==0?<p className="text-center font-bold text-2xl w-full">
+        Hope you had a nice journey!
+        </p>:<p className="text-center font-bold text-2xl w-full">No Completed Trips</p>}
         {trips && trips.map((trip,i)=>{
             return(
-                <UpcomingCard key={trip._id} trip={trip} i={i+1}/>
+               <CompletedCard trip={trip} i={i+1} key={trip._id}/>
             )
         })}
     </div>
   )
 };
 
-export default Upcoming;
+export default Completed;

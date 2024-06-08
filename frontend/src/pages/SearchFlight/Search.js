@@ -17,6 +17,7 @@ import './search.css';
 import axios from '../../axios';
 import { useFirebase } from '../../firebase';
 import ResultsPage from './ResultsPage';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Search = () => {
     const date=new Date();
@@ -30,7 +31,7 @@ const Search = () => {
      const [rd,setrd]=useState(curdate);
      const [adult,setadult]=useState(1);
      const [child,setchild]=useState(0);
-    const [Class, setClass] = useState('');
+    const [Class, setClass] = useState('Economy');
     const [from,setfrom]=useState(null);
     const [to,setto]=useState(null);
     const [data,setdata]=useState([]);
@@ -38,17 +39,33 @@ const Search = () => {
     const handleChange = (event) => {
         setClass(event.target.value);
     };
+         useEffect(()=>{
+        const h=window.localStorage.getItem('obj');
+        var t;
+        if(h){
+          t=JSON.parse(h)[0]
+        }
+        
+        if(t){
+          setway(t.way);
+          setfrom(t.from);
+          setto(t.to);
+          setdd(t.dd);
+          setrd(t.rd);
+          setadult(t.adult);
+          setchild(t.child);
+          setClass(t.Class);
+        }
+        
+    },[])
     const findResults=(e)=>{
       e.preventDefault();
         const obj={way,from,to,dd,rd,adult,child,Class}
-        if(obj.Class==='' || obj.from===null||obj.to===null){
-            console.log("error")
-        }
         if(adult+child>=10){
-          console.log("Not Able to book more than 9 people")
+          toast.error("can't book more than 10 peoples",{position:"top-center"})
         }
         else{
-             axios.post("/searchresults",obj, {
+             axios.post("/users/searchresults",obj, {
             headers: {
           'Content-Type': 'application/json',
           'Authorization': firebase.token
@@ -56,22 +73,30 @@ const Search = () => {
         withCredentials: true
       })
       .then((res) => {
-        console.log(res.data);
+        if(res.data.length===0){
+          toast.error("Sorry,No flights find!",{position:"top-center"})
+        }
+        else{
+           console.log(res.data);
           window.localStorage.setItem('obj',JSON.stringify([obj]));
           window.localStorage.setItem('way',way);
           window.localStorage.setItem('resultdata',JSON.stringify(res.data));
           navigate("/flights/result")
+        }
+       
       })
-      .catch(err => console.log(err));
+      .catch(err => "err");
         }
     }
     const getcities=()=>{
-        axios.get("/getcities",{
+      console.log("called");
+        axios.get("/users/getcities",{
             headers:{
                 'Content-Type':'application/json'
             },
             withCredentials:true
         }).then((res)=>{
+            
             setcities(res.data);
         }).catch(err=>{
                 console.log(err);
@@ -79,7 +104,7 @@ const Search = () => {
     }
     useEffect(()=>{
         getcities();
-    },[])
+    },[from,to])
     const [hasValue, setHasValue] = useState(true);
     const onFocus = () => setFocused(true);
     const onBlur = () => setFocused(false);
@@ -97,7 +122,7 @@ const Search = () => {
             onChange={(e)=>setway(e.target.value)}
             >
             <FormControlLabel value="oneway" control={<Radio />} defaultChecked={true} label="One-Way" />
-            <FormControlLabel value="round" control={<Radio />} label="Round-Trip" />
+            <FormControlLabel value="round" disabled control={<Radio />} label="Round-Trip" />
             </RadioGroup>
         </FormControl>
       </div>
@@ -111,7 +136,7 @@ const Search = () => {
         id="controllable-states-demo"
         options={cities}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="From" />}
+        renderInput={(params) => <TextField required {...params} label="From" />}
       />
         <SwapHorizIcon className='shadow-sm border-2 -ml-2  rounded-lg -mr-2 bg-white z-10 border-blue-100' fontSize='large' onClick={()=>{
             setfrom(to);
@@ -127,7 +152,7 @@ const Search = () => {
         id="controllable-states-demo"
         options={cities}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="to" />}
+        renderInput={(params) => <TextField required {...params} label="to" />}
       />
       </div>
 
@@ -137,6 +162,7 @@ const Search = () => {
                  InputProps={{
                     inputProps:{min:curdate}
                 }}
+                required
                 className={way==="round"?'w-36 kl':'w-80 kl'}
                 value={dd}
                 onChange={(e) => {
@@ -150,6 +176,7 @@ const Search = () => {
                 type={hasValue || focus ? "Date" : "text"}
                 />
              {way==='round' && <TextField
+             required
                 onFocus={onFocus}
                 onBlur={onBlur}
                 className='md:w-40 kl w-44'
@@ -209,7 +236,7 @@ const Search = () => {
                 onChange={handleChange}
                 
                 >
-                <MenuItem value={"Economy"} selected={true}>Economy</MenuItem>
+                <MenuItem value={"Economy"} >Economy</MenuItem>
                 <MenuItem value={"Business"}>Business</MenuItem>
                 <MenuItem value={"Firstclass"}>First Class</MenuItem>
                 </Select>
@@ -223,6 +250,7 @@ const Search = () => {
       
     </form>
     </div>
+    <ToastContainer autoClose={1000}/>
     </>
   )
 };

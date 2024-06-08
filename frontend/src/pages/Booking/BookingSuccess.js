@@ -29,7 +29,7 @@ const BookingSuccess = () => {
 
   useEffect(() => {
     if (travellerDetails) {
-      axios.post("/addbooking", { travellerDetails, flightid1, flightid2, orderId, paymentId, currUser }, {
+      axios.post("/payment/addbooking", { travellerDetails, flightid1, flightid2, orderId, paymentId, currUser }, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       })

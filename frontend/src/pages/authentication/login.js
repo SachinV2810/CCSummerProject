@@ -28,6 +28,7 @@ const Login = () => {
     signInWithEmailAndPassword(firebase.firebaseAuth,loginData.email,loginData.password)
     .then((res)=>{
       setloader(false);
+      window.location.reload();
       firebase.SetUser(res.user);
       navigate("/");
     })

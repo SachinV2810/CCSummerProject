@@ -4,12 +4,30 @@ import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 const BookingSuccFlightPrev = ({flight}) => {
 
-    function extractDateTimeParts(date) {
-  const datePart = date.slice(0, 10); 
-  const timePart = date.slice(11, 16); 
-  return { date: datePart, time: timePart };
+   function extractDateTimeParts(dateTimeStr) {
+  const dateTimeUTC = new Date(dateTimeStr);
+  const dateTimeLocal = new Date(dateTimeUTC.toLocaleString());
+  const date = dateTimeLocal.toLocaleDateString();
+  const time = dateTimeLocal.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return { date, time };
 }
 
+
+ function getTimeDifference(date1, date2) {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+        const diffMs = Math.abs(d2 - d1);
+
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        
+        return `${diffHours}h${diffMinutes}m`;
+}
+function formatISODate(isoDate) {
+            const date = new Date(isoDate);
+                const options = {  hour: 'numeric', minute: 'numeric', timeZoneName: 'short',hour12:false };
+            return date.toLocaleString('en', options);
+    }
 function getDateTimeParts(flight, type) {
   if (!flight || !flight[type]) {
     return { date: '', time: '' }; 
@@ -35,14 +53,14 @@ const arrivalPart = getDateTimeParts(flight, 'arrivalDateTime');
     </div>
     <div className="flex justify-between w-full items-center">
         <span className="flex flex-col">
-            <span className="font-bold text-lg">{departedPart.time}</span>
+            <span className="font-bold text-lg">{formatISODate(flight.departureDateTime).split("GMT")[0]}</span>
             <span>{flight.departureAirport}</span>
         </span>
         <span className="w-1/3 bg-slate-500 self-center" style={{height:"0.2px"}}></span>
-        <span>{Math.abs(Number(departedPart.time.split(':')[0])-Number(arrivalPart.time.split(':')[0]))}h{Math.abs(Number(departedPart.time.split(':')[1])-Number(arrivalPart.time.split(':')[1]))}m</span>
+        <span>{getTimeDifference(flight.departureDateTime,flight.arrivalDateTime)}</span>
         <span className="w-1/3 bg-slate-500 self-center" style={{height:"0.2px"}}></span>
         <span className="flex flex-col">
-            <span className="font-bold text-lg">{arrivalPart.time}</span>
+            <span className="font-bold text-lg">{formatISODate(flight.arrivalDateTime).split("GMT")[0]}</span>
             <span className="font-medium">{flight.arrivalAirport}</span>
         </span>
     </div>

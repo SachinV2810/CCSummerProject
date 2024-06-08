@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PreviewCard from "./PreviewCard";
 import ResultCard from "./ResultCard";
-
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 const ResultsPage = () => {
   const [w,setw]=useState('');
@@ -30,15 +30,13 @@ const navigate=useNavigate();
   },[])
     return(
      
-      <div>
-        <PreviewCard/>
+      <div className="pt-20">
+        <Link to="/flights" className="w-full flex justify-center"><p className="font-bold text-center text-white bg-orange-400 w-40 rounded-md mb-10 mt-8">UPDATE SEARCH</p></Link>
     <div className="pb-40">
-    {w==='oneway'?<div className="flex flex-col  md:top-96 top-20">
+    {w==='oneway'?<div className="flex flex-wrap flex-col relative items-center">
       {resultdata.map((result)=>{
         console.log(result)
-        return<div key={result._id} className="relative ml-80 top-10" style={{width:"78%"}}> 
-        <ResultCard flightdata={result} a={t3.adult} c={t3.child} w={w}/>
-      </div>
+        return <ResultCard key={result._id} flightdata={result} a={t3.adult} c={t3.child} w={w}/>
       })}
     </div>:<div className="flex ">
       <div className="flex flex-col flex-wrap">

@@ -20,7 +20,7 @@ const BookingSchema = new Schema({
     paymentId: { type: String, required: true },
     adultDetails: [AdultDetailsSchema],
     childDetails: [ChildDetailsSchema],
-    bookingDate: { type: Date, default: Date.now },
+    bookingDate: { type: Date, default: new Date() },
     totalPrice: { type: Number, required: true },
     contactEmail: { type: String, required: true },
     contactPhone: { type: String, required: true },

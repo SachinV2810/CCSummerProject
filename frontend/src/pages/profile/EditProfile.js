@@ -29,7 +29,7 @@ const EditProfile = () => {
         // if(setEmailedit){
         //     return window.alert("verify your email address");
         // }
-        firebase.updateprofile(profiledata.email,currUser,profiledata.name,setloading);
+        firebase.updateProfileWithVerification(profiledata.email,currUser,profiledata.name,setloading);
         setEmailedit(false);
         setcp(false);
     }
@@ -58,12 +58,6 @@ const EditProfile = () => {
     <form className="w-full" onSubmit={handleSubmit}>
       <div className="text-2xl w-full text-center font-bold">Personal Information</div>
       {loading?<CircularProgress/>:<div className="w-full justify-evenly flex justify-between flex-wrap mt-4">
-        <TextField 
-        value={9310432578} 
-        disabled 
-        label="Phone number"
-        variant="outlined"
-        className="outline-none md:w-1/4  w-full border-2 border-orange-500 pl-2"></TextField>
             <TextField  
         variant="outlined"
         name='email'

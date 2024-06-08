@@ -10,6 +10,7 @@ import axios from "../../axios";
 const UpcomingCard = ({trip,i}) => {
   const [success,setsucesss]=useState(true);
   const navigate=useNavigate();
+  const Resheduled=trip.flightid.predepartureDateTime!==trip.flightid.departureDateTime  && trip.predepartureDateTime!==trip.departureDateTime;
   const firebase=useFirebase();
   const [open,setOpen]=useState(false);
   const handleClose = () => {
@@ -29,10 +30,10 @@ function formatISODate(isoDate) {
     const [hide,sethide]=useState(false);
     const handleCancel=()=>{
       handleClose()
-      axios.delete(`/cancel/${trip._id}/${trip.booking._id}/${trip.flightid._id}`,{
+      axios.delete(`/users/cancel/${trip._id}/${trip.booking._id}/${trip.flightid._id}/${user.uid}`,{
         headers:{
           'Content-Type':'application/json',
-          'Authorization':user.uid
+          'Authorization':firebase.token
         },
         withCredentials:true
       }).then((res)=>{
@@ -47,17 +48,25 @@ function formatISODate(isoDate) {
     }
   return (
      <div className="mb-10">
-        <div className="w-3/4 flex text-lg  justify-between h-8 ml-40 shadow-lg pl-6">Upcoming Flight {i}
-        <div>{hide?<KeyboardArrowDownIcon fontSize="large" onClick={()=>sethide(!hide)}/>:<KeyboardArrowUpIcon fontSize="large" onClick={()=>sethide(!hide)}/>}</div></div>
+        <div className="w-3/4 flex text-lg items-center justify-between hover:cursor-pointer h-12 ml-40 shadow-lg pl-6" onClick={()=>sethide(!hide)}><div className="flex">Upcoming Flight {i}
+        {Resheduled && <div className="bg-red-300 h-8 w-32 rounded-xl text-center">Resheduled</div>}</div>
+        <div>{hide?<KeyboardArrowDownIcon fontSize="large" />:<KeyboardArrowUpIcon fontSize="large" />}</div>
+        </div>
         {hide && <div className=" w-3/4 pb-10 pt-8 shadow-sm h-max shadow-orange-400 ml-40 pl-4 pr-4 ">
               <div className="flex justify-between">
                 <div><span className="font-bold">Booking Id</span> {trip?.booking._id}</div>
                 <div><span className="font-bold">Booking date </span> {formatISODate(trip?.booking.bookingDate).split("GMT")[0]}</div>
                 </div> 
                <div><span className="font-bold">Price Paid</span> &#x20B9;{trip?.booking.totalPrice}</div>
+               {Resheduled && <div className="flex justify-between">
+                     <div><span className="font-bold">Previous Departure Details </span>{formatISODate(trip.predepartureDateTime).split("GMT")[0]}</div>
+                    <div><span className="font-bold">Previous Arrival Details </span>{formatISODate(trip.prearrivalDateTime).split("GMT")[0]}</div>
+                    
+               </div>}
                <div className="flex justify-between">
-                     <div><span className="font-bold">Departure Details </span>{formatISODate(trip.departureDateTime).split("GMT")[0]}</div>
-                    <div><span className="font-bold">Arrival Details </span>{formatISODate(trip.arrivalDateTime).split("GMT")[0]}</div>
+                     <div><span className="font-bold">Departure Details </span>{formatISODate(trip.flightid.departureDateTime).split("GMT")[0]}</div>
+                    <div><span className="font-bold">Arrival Details </span>{formatISODate(trip.flightid.arrivalDateTime).split("GMT")[0]}</div>
+                    
                </div>
               
                <div>

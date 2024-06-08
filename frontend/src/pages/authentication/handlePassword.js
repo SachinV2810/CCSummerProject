@@ -19,7 +19,7 @@ const HandlePass=()=>{
     const handleSubmit=async(e)=>{
       setloader(true);
         e.preventDefault();
-        const res=await axios.get("/allusers",{
+        const res=await axios.get("/admin/allusers",{
           headers:{
             'Content-Type':'application/json',
           },

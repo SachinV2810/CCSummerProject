@@ -25,7 +25,7 @@ const Adminlogin=() => {
   const handleSubmit=async (e)=>{
     setloader(true);
     e.preventDefault();
-    if(loginData.email==='sachinvarmaiitjee@gmail.com'){
+    if(loginData.email===process.env.REACT_APP_ADMIN_EMAIL){
         signInWithEmailAndPassword(firebase.firebaseAuth,loginData.email,loginData.password)
     .then((res)=>{
       setloader(false);

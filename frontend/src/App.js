@@ -20,20 +20,21 @@ import Upcoming from "./pages/My Trips/Upcoming.js";
 import Header from "./pages/extras/Header.js";
 import EditFlight from "./admin/EditFlight.js";
 import BookFlights from "./admin/BookFlights.js";
+import TripsPage from "./pages/My Trips/TripsPage.js";
 function App() {
 const firebase=useFirebase()
 const admin=firebase.admin;
   if(firebase.user===null){
     return(
-      <div className="w-full h-screen bg-orange-400/30 flex items-center justify-center">
-        <CircularProgress size={60}></CircularProgress>
+      <div className="w-full h-screen bg-blue-400/40 flex items-center justify-center">
+        <CircularProgress size={60} color="inherit"></CircularProgress>
       </div>
       
     )
   }
   return (
     <div className="App">
-      {firebase.user!==0 && !admin && <Header/>}
+      {firebase.user!==0 && admin==false && <Header/>}
       <Routes>
         <Route path="/admin" element={admin?<Admin/>:<Navigate to="/adminlogin"/>}/>
         <Route path="/adminlogin" element={admin?<Navigate to="/admin"/>:<Adminlogin/>}/>
@@ -49,7 +50,7 @@ const admin=firebase.admin;
         <Route path="/flight" element={firebase.user===0?<Navigate to="/login"/>:<Flight/>}/>
         <Route path="/signup" element={firebase.user===0?<Signup/>:<Homepage/>}/>
         <Route  path="/flights/review/:id/:adult/:child" element={firebase.user===0?<Navigate to="/login"/>:<Booking/>}></Route>
-        <Route path="/mytrips" element={firebase.user===0?<Navigate to="/login"/>:<Upcoming/>}></Route>
+        <Route path="/mytrips" element={firebase.user===0?<Navigate to="/login"/>:<TripsPage/>}></Route>
         <Route  path="/flights/review/:id1/:id2/:adult/:child" element={firebase.user===0?<Navigate to="/login"/>:<BookingPart2/>}></Route>
         <Route target="blank" path="/booking/:flightid1/:orderId/:paymentId" element={firebase.user===0?<Navigate to="/login"/>:<BookingSuccess/>}></Route>
         <Route target="blank" path="/booking/:flightid1/:flightid2/:orderId/:paymentId" element={firebase.user===0?<Navigate to="/login"/>:<BookingSuccess/>}></Route>

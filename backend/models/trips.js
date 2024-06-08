@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { type } = require('os');
 
 // Define the schema for a trip
 const tripSchema = new mongoose.Schema({
@@ -17,11 +18,23 @@ const tripSchema = new mongoose.Schema({
     enum: ['Upcoming','Cancelled' ,'Completed'],
     default: 'Upcoming'
   },
+  checkedin:{
+    type:Boolean,
+    default:false
+  },
   departureDateTime: {
     type: Date,
     required: true
   },
   arrivalDateTime: {
+    type: Date,
+    required: true
+  },
+    predepartureDateTime: {
+    type: Date,
+    required: true
+  },
+  prearrivalDateTime: {
     type: Date,
     required: true
   },
