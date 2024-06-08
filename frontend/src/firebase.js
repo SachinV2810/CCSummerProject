@@ -5,7 +5,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import axios from './axios';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDBxChMXYvvhqvI8CWqXC-C1HH1nbNOZ-s",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "semesterproject-14bba.firebaseapp.com",
   projectId: "semesterproject-14bba",
   storageBucket: "semesterproject-14bba.appspot.com",
@@ -64,11 +64,11 @@ export const FirebaseProvider = (props) => {
             if (currentUser) {
                 const token=await getIdToken(currentUser)
                 setToken(token)
-                if (currentUser.email === 'sachinvarmaiitjee@gmail.com') {
+                if (currentUser.email === process.env.REACT_APP_ADMIN_EMAIL) {
                     setadmin(true);
                 }
                 setUser(currentUser);
-                   if(currentUser.email!=='sachinvarmaiitjee@gmail.com'){
+                   if(currentUser.email!==process.env.REACT_APP_ADMIN_EMAIL){
                 await axios.get("/users/updateTrips",{
                 headers:{
                     'Content-Type':'application/json'
