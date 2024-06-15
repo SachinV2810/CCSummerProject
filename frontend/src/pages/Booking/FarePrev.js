@@ -1,6 +1,6 @@
 const FarePrev = ({flight1,flight2,a,c}) => {
   return (
-    <div className="bg-white pl-4 pr-4 shadow-lg shadow-blue-200 basis-1/4 h-64 flex flex-wrap content-start">
+    <div className="bg-white pl-4 pr-4 shadow-lg shadow-blue-200 md:basis-1/4  h-64 flex flex-wrap content-start">
         <p className="font-bold text-2xl w-full text-center  h-10">Fare Summary</p>
         <div className="flex w-full flex-wrap">
         <div className="flex w-full justify-between items-center">

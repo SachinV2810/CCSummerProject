@@ -64,16 +64,14 @@ const Header = () => {
   return (
     <>
     
-    <header className="w-full bg-white  z-20 shadow-lg pb-8 pt-4 h-20 fixed flex justify-between ">
+    <header className="w-full bg-white z-20 shadow-lg pb-8 md:pt-4 pt-12 md:h-20 h-12 fixed flex justify-between ">
      
-        <div className="flex basis-1/4  items-center justify-between ml-10 pl-2 pr-2">
-          <div onClick={()=>navigate("/")}><img src="./goibibo.png" className="w-44"></img></div>
-          <Link to="/flights" target="blank" className="text-blue-800 text-xl">Book a Flight now</Link>
+        <div className="flex items-center justify-between md:ml-10 ml-0 pl-2 pr-2">
+          <div onClick={()=>navigate("/")}><img src="./Logort.png" className="md:w-44 w-36"></img></div>
+          <Link to="/flights" target="blank" className="text-blue-800 md:text-xl text-md">Book a Flight now</Link>
         </div>
-        <div className="flex basis-1/3 items-center justify-around mr-10 pl-2 pr-2">
-
-
-          <Link to="/mytrips" target="blank" className="text-blue-800 text-xl">See your trips</Link>
+        <div className="flex  items-center justify-around mr-10 pl-2 pr-2">
+          <Link to="/mytrips" target="blank" className="text-blue-800 text-xl md:block hidden">See your trips</Link>
           
           <Tooltip title="See Notifications">
               <Badge badgeContent={notiValue} color="primary" >
@@ -135,7 +133,7 @@ const Header = () => {
       </Menu>
 
         <Tooltip>
-          <IconButton onMouseEnter={()=>sethide(true)}>
+          <IconButton onMouseEnter={()=>sethide(!hide)}>
           <Avatar alt="profile"  src={currUser.photoURL?currUser.photoURL:'https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQ'}/>
           </IconButton>
         </Tooltip>

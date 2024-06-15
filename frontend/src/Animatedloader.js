@@ -1,6 +1,6 @@
 const Animatedloader = ({src,alt}) => {
   return (
-      <img src={src} style={{width:"40%", height:"50%"}} alt={alt}></img>
+      <img src={src}  className="md:w-1/2 md:h-1/2 w-60 h-60" alt={alt}></img>
 
   )
 };

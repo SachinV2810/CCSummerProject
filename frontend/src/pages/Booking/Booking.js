@@ -37,7 +37,7 @@ const Booking = () => {
  if (!firebase.loader) {
     return (
         <div className="flex flex-wrap h-full">
-            <div className="flex justify-around w-full mt-24">
+            <div className="flex md:nowrap wrap justify-around md:w-full  mt-24">
                 <FlightPrev flight={flight} />
                 <FarePrev flight1={flight} a={adult} c={child} />
             </div>

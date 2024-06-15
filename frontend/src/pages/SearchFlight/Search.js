@@ -108,8 +108,8 @@ const Search = () => {
     const onBlur = () => setFocused(false);
   return (
     <>
-    <div className=' '>
-    <form onSubmit={findResults} className='flex  flex-wrap md:items-center md:justify-evenly -ml-8 md:ml-0 border-r-0 border-l-0 w-full border-2 pt-28'>
+    <div >
+    <form onSubmit={findResults} className='flex flex-wrap md:items-center md:justify-evenly -ml-10 md:ml-0 border-r-0 border-l-0 w-full border-2 pt-28'>
       <div className='w-full ml-20 md:ml-36  '>
         <FormControl> 
             <RadioGroup
@@ -124,7 +124,7 @@ const Search = () => {
             </RadioGroup>
         </FormControl>
       </div>
-      <div className='flex items-center w-full md:w-1/4 ml-20 md:ml-0'>
+      <div className='flex items-center w-4/5 md:w-1/4 ml-20  md:ml-0'>
         <Autocomplete
         value={from}
         isOptionEqualToValue={(option,value)=>option===value}
@@ -223,8 +223,8 @@ const Search = () => {
                 </Select>
       </FormControl>
       </div>
-      <div >
-        <FormControl className='w-40 md:w-44'>
+      <div className='md:ml-0 ml-20 mt-10 md:mt-0' >
+        <FormControl className='w-60 md:w-44 '>
             <InputLabel id="demo-simple-select-label">Class</InputLabel>
                 <Select
                 labelId="demo-simple-select-label"

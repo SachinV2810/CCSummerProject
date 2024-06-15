@@ -116,33 +116,33 @@ rzp1.on('payment.failed', function (response){
   };
 
   return (
-    <div className="bg-white shadow-lg shadow-blue-200 w-1/2 ml-32 pl-2 flex flex-wrap mt-20 pb-10 pt-7">
+    <div className="bg-white shadow-lg shadow-blue-200 md:w-1/2 md:ml-32 pl-2 flex flex-wrap mt-20 pb-10 pt-7">
       <p className="text-xl w-full font-bold ml-4">
         <PeopleIcon color='primary' /> Traveller details
       </p>
       <div className="w-full bg-slate-400 mt-1" style={{ height: '0.4px' }}></div>
-      <div className="flex flex-wrap mt-4">
+      <div className="flex flex-wrap  mt-4">
         {adultData.map((_, i) => (
-          <div key={i} className="flex">
+          <div key={i} className="flex md:flex-nowrap flex-wrap ">
             <div className="font-bold ml-4 mr-4">Adult {i + 1}</div>
-            <form className="flex mb-3">
+            <form className="flex md:flex-nowrap flex-wrap  mb-3">
               <input
                 required
-                className="mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
+                className="md:mr-4 border-2 border-blue-400 w-full md:w-max outline-none pl-2 h-8 rounded"
                 placeholder="First Name"
                 value={adultData[i].firstName}
                 onChange={(e) => handleInputChange(i, 'firstName', e.target.value)}
               />
               <input
                 required
-                className="mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
+                className="md:mr-4 border-2 border-blue-400 w-full md:w-max outline-none pl-2 h-8 rounded"
                 placeholder="Last Name"
                 value={adultData[i].lastName}
                 onChange={(e) => handleInputChange(i, 'lastName', e.target.value)}
               />
               <input
                 required
-                className="mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
+                className="md:mr-4 border-2 border-blue-400 w-full md:w-max outline-none pl-2 h-8 rounded"
                 placeholder="Aadhar Number"
                 maxLength={12}
                 value={adultData[i].aadhar}
@@ -156,18 +156,18 @@ rzp1.on('payment.failed', function (response){
       <div className="flex flex-wrap w-full">
         {childData.map((_, i) => (
           <div key={i} className="flex w-full">
-            <div className="font-bold ml-4 mr-4">Child {i + 1}</div>
+            <div className="font-bold ml-4 md:mr-4">Child {i + 1}</div>
             <form className="flex mb-3">
               <input
                 required
-                className="mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
+                className="md:mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
                 placeholder="First Name"
                 value={childData[i].firstName}
                 onChange={(e) => handleInputChange(i, 'firstName', e.target.value, false)}
               />
               <input
                 required
-                className="mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
+                className="md:mr-4 border-2 border-blue-400 outline-none pl-2 h-8 rounded"
                 placeholder="Last Name"
                 value={childData[i].lastName}
                 onChange={(e) => handleInputChange(i, 'lastName', e.target.value, false)}
@@ -179,9 +179,9 @@ rzp1.on('payment.failed', function (response){
       <div className="w-full bg-slate-400 mt-1 mb-4" style={{ height: '0.4px' }}></div>
       <div className="flex">
         <div>
-          <label htmlFor="email" className="ml-4 mr-4">Email Address</label>
+          <label htmlFor="email" className="ml-4 md:mr-4">Email Address</label>
           <input
-            className="mr-4 border-2 border-blue-400 w-60 outline-none pl-2 h-8 rounded"
+            className="md:mr-4 border-2 border-blue-400 w-60 outline-none pl-2 h-8 rounded"
             placeholder="Email"
             required
             autoComplete='off'
@@ -191,7 +191,7 @@ rzp1.on('payment.failed', function (response){
           />
         </div>
         <div>
-          <label htmlFor="phno" className="ml-4 mr-4">Mobile Number</label>
+          <label htmlFor="phno" className="md:ml-4 md:mr-4">Mobile Number</label>
           <input
             required
             autoComplete='off'
@@ -205,7 +205,7 @@ rzp1.on('payment.failed', function (response){
       </div>
       <p className='font-light ml-4 mt-2 text-sm text-green-800'>*ticket will be sent to provided email and mobile.</p>
       <div className="w-full bg-slate-400 mt-4 mb-4" style={{ height: '0.4px' }}></div>
-      <div className='flex justify-end w-full mr-12 mt-4'>
+      <div className='flex justify-end w-full md:mr-12 mt-4'>
         <button className='bg-orange-500 text-white pr-3 pl-3 h-9 w-max rounded-lg' onClick={handleOpen}>Proceed to Payment</button>
       </div>
       <Backdrop

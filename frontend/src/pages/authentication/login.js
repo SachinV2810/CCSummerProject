@@ -43,11 +43,11 @@ const Login = () => {
   return (
     <div className="overflow-hidden">
     {loader && <LinearProgress color="secondary" className="w-full absolute h-2"/>}
-    <div style={{backgroundImage:"url('./login.jpg')"}} className="w-full  h-screen bg-cover flex justify-center items-center flex-wrap ">
+    <div style={{backgroundImage:"url('./login.jpg')"}} className="w-full h-screen bg-cover flex justify-center items-center flex-wrap ">
       {err.length===0?"":<div className="w-96 h-8 bg-red-700 absolute top-20 text-white text-center rounded pt-1"><FontAwesomeIcon icon={faXmarkCircle} className="mr-2"/>{err.split("auth/")[1].toLocaleUpperCase()}</div>}
-        <div className="h-2/3 w-96  bg-white/75  text-center flex flex-wrap justify-center items-center">
+        <div className="h-2/3 w-96   bg-white/75  text-center flex flex-wrap justify-center items-center">
           <div className="merienda relative top-6 h-20">Login to Make Your Trip</div>
-          <form className="h-2/3 flex flex-wrap justify-center items-center" onSubmit={handleSubmit}>
+          <form className="md:h-2/3 flex flex-wrap justify-center items-center" onSubmit={handleSubmit}>
             
             <input 
             placeholder=" email" 

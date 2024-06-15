@@ -37,7 +37,7 @@ function getdate(isoDate) {
 }
 
   return (
-    <div className="bg-white shadow-lg shadow-blue-200 basis-1/2 h-max pb-4 w-full pl-4 pr-4 ml-10">
+    <div className="bg-white shadow-lg shadow-blue-200 basis-1/2 md:block hidden h-max pb-4 w-full pl-4 pr-4 ml-10">
       <div className="font-semibold w-full text-xl"> <FmdGoodIcon color='primary'/> {flight.departureAirport} - {flight.arrivalAirport}</div>
       <div className="border-2 pl-2 pr-2 h-36 rounded flex flex-wrap items-center justify-center">
       <div className="flex justify-between w-full">

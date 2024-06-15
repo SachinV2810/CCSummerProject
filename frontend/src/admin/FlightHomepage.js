@@ -55,7 +55,7 @@ let navigate = useNavigate();
   return (
     <div>
       <Header/>
-      <div className="text-center text-3xl mb-4 font-bold italic text-blue-600 pt-20">All Active Flights</div>
+      <div className="text-center text-3xl mb-4 font-bold italic text-blue-600 pt-20">All Flights</div>
       <table className="table-auto ml-28 mt-12 border-2 ">
   <thead>
     <tr className="bg-blue-400">
