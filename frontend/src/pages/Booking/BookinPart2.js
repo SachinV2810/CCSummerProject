@@ -16,8 +16,7 @@ const BookingPart2 = () => {
         axios.get(`/users/getbreview/${id1}/`,{
             headers:{
                 'Content-Type':'application/json'
-            },
-            withCredentials:true
+            }
         })
         .then((res)=>{
             setflight1(res.data);

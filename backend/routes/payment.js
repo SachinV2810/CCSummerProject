@@ -18,6 +18,7 @@ router.post("/getorderid",async(req,res)=>{
     const options=req.body;
     const order=await razorpay.orders.create(options)
     if(!order){
+        
         return res.status(500).send("Payment cannot completed");
     }
     res.json(order);
@@ -37,29 +38,23 @@ router.post("/validatePayment",(req,res)=>{
     if((digest!==razorpay_signature)){
         return res.status(400).json({msg:"Transaction Failed"});
     }
-    const token=jwt.sign({id:razorpay_payment_id},process.env.JWT_SECRET,{expiresIn:15});
-    res.cookie("token",token);
     res.json({
         msg:"success",
         orderId:razorpay_order_id,
         paymentId:razorpay_payment_id,
     })
     }catch(err){
+        console.log(err)
         res.status(404).json({msg:"payment failed!"})
     }
     
 })
 
-router.post("/addbooking",(req,res)=>{
+router.post("/addbooking",async(req,res)=>{
+      
     try{
-    const token=req.cookies.token;
+
    let {flightid1,flightid2,paymentId,travellerDetails,currUser}=req.body;
-     if(!token){
-        res.status(401).json("token not valid");
-    }else{
-        jwt.verify(token,process.env.JWT_SECRET,async(err,decoded)=>{
-            if(err)return res.status(401).json("token is wrong");
-            else{
                 var passengers;
                 if(travellerDetails){
                     passengers=travellerDetails[0].length+travellerDetails[1].length;
@@ -90,9 +85,7 @@ router.post("/addbooking",(req,res)=>{
                     });
                     
                 }  
-            }
-        })
-    }
+            
     }catch(err){
         console.log(err);
     }

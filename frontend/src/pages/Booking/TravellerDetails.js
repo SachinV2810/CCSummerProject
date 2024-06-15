@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ToastContainer, toast } from 'react-toastify';
+import { useFirebase } from '../../firebase';
 const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
      const [open, setOpen] = useState(false);
+      const firebase=useFirebase();
     const handleClose = () => {
       setOpen(false);
       };
@@ -57,11 +59,11 @@ const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
     }
     console.log(option.amount);
      if (validateInputs()) {
+          
             const res=await axios.post("/payment/getorderid",option,{
                 headers:{
                     'Content-Type':'application/json'
-                },
-                withCredentials:true
+                }
             }) 
             var options = {
                 "key": process.env.REACT_APP_RAZORPAY_KEY_ID, 
@@ -75,12 +77,12 @@ const TravellerDetails = ({ adult, child, flight1,flight2 }) => {
                     const validateRes=await axios.post("/payment/validatePayment",body,{
                         headers:{
                             'Content-Type':'application/json'
-                        },
-                        withCredentials:true
+                        }
                     })
                     if(validateRes.data.msg==='success'){
                         window.localStorage.setItem('travelBody',JSON.stringify([adultData,childData,option,contactInfo]));
                         flight2?navigate(`/booking/${flight1._id}/${flight2._id}/${validateRes.data.orderId}/${validateRes.data.paymentId}`,{replace:true}):
+                             
                         navigate(`/booking/${flight1._id}/${validateRes.data.orderId}/${validateRes.data.paymentId}`,{replace:true});
                     }
                 },
@@ -107,7 +109,9 @@ rzp1.on('payment.failed', function (response){
     rzp1.open();
       
     } else {
-      alert('Please fill all the required fields'); 
+      toast.error('Please fill all the required fields',{
+        position:'top-center'
+       }); 
     }
   };
 

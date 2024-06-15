@@ -22,10 +22,23 @@ const UpcomingCard = ({trip,i}) => {
     };
   const {user}=firebase;
 function formatISODate(isoDate) {
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+    const hours = String(date.getUTCHours()).padStart(2, '0'); 
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); 
+    const formattedDate = `${day} ${month} ${year} ${hours}:${minutes}`;
+    return formattedDate;
+}
+
+function formatISODate2(isoDate) {
             const date = new Date(isoDate);
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
             return date.toLocaleString('en-US', options);
     }
+
+
 
     const [hide,sethide]=useState(false);
     const handleCancel=()=>{
@@ -34,8 +47,7 @@ function formatISODate(isoDate) {
         headers:{
           'Content-Type':'application/json',
           'Authorization':firebase.token
-        },
-        withCredentials:true
+        }
       }).then((res)=>{
           window.location.reload();
           setsucesss(true);
@@ -55,17 +67,17 @@ function formatISODate(isoDate) {
         {hide && <div className=" w-3/4 pb-10 pt-8 shadow-sm h-max shadow-orange-400 ml-40 pl-4 pr-4 ">
               <div className="flex justify-between">
                 <div><span className="font-bold">Booking Id</span> {trip?.booking._id}</div>
-                <div><span className="font-bold">Booking date </span> {formatISODate(trip?.booking.bookingDate).split("GMT")[0]}</div>
+                <div><span className="font-bold">Booking date </span> {formatISODate2(trip?.booking.bookingDate).split("GMT")[0]}</div>
                 </div> 
                <div><span className="font-bold">Price Paid</span> &#x20B9;{trip?.booking.totalPrice}</div>
                {Resheduled && <div className="flex justify-between">
-                     <div><span className="font-bold">Previous Departure Details </span>{formatISODate(trip.predepartureDateTime).split("GMT")[0]}</div>
-                    <div><span className="font-bold">Previous Arrival Details </span>{formatISODate(trip.prearrivalDateTime).split("GMT")[0]}</div>
+                     <div><span className="font-bold">Previous Departure Details </span>{formatISODate(trip.predepartureDateTime)}</div>
+                    <div><span className="font-bold">Previous Arrival Details </span>{formatISODate(trip.prearrivalDateTime)}</div>
                     
                </div>}
                <div className="flex justify-between">
-                     <div><span className="font-bold">Departure Details </span>{formatISODate(trip.flightid.departureDateTime).split("GMT")[0]}</div>
-                    <div><span className="font-bold">Arrival Details </span>{formatISODate(trip.flightid.arrivalDateTime).split("GMT")[0]}</div>
+                     <div><span className="font-bold">Departure Details </span>{formatISODate(trip.flightid.departureDateTime)}</div>
+                    <div><span className="font-bold">Arrival Details </span>{formatISODate(trip.flightid.arrivalDateTime)}</div>
                     
                </div>
               

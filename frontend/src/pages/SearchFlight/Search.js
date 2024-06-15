@@ -8,7 +8,6 @@ import { TextField } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Header from '../extras/Header';
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -16,7 +15,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import './search.css';
 import axios from '../../axios';
 import { useFirebase } from '../../firebase';
-import ResultsPage from './ResultsPage';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Search = () => {
@@ -65,12 +63,12 @@ const Search = () => {
           toast.error("can't book more than 10 peoples",{position:"top-center"})
         }
         else{
+            firebase.setloader(true)
              axios.post("/users/searchresults",obj, {
             headers: {
           'Content-Type': 'application/json',
           'Authorization': firebase.token
-        },
-        withCredentials: true
+        }
       })
       .then((res) => {
         if(res.data.length===0){
@@ -83,6 +81,7 @@ const Search = () => {
           window.localStorage.setItem('resultdata',JSON.stringify(res.data));
           navigate("/flights/result")
         }
+          firebase.setloader(false);
        
       })
       .catch(err => "err");
@@ -93,8 +92,7 @@ const Search = () => {
         axios.get("/users/getcities",{
             headers:{
                 'Content-Type':'application/json'
-            },
-            withCredentials:true
+            }
         }).then((res)=>{
             
             setcities(res.data);

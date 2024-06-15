@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import PreviewCard from "./PreviewCard";
 import ResultCard from "./ResultCard";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";

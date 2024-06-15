@@ -25,6 +25,7 @@ export const FirebaseProvider = (props) => {
     const [user, setUser] = useState(null);
     const [admin, setadmin] = useState(false);
     const [token, setToken] = useState('');
+  const [loader,setloader]=useState(false);
 
     async function upload(file, user, setLoading) {
         const fileRef = ref(storage, user.uid + '.jpeg');
@@ -37,7 +38,7 @@ export const FirebaseProvider = (props) => {
 
     async function verifyEmail(user, setEditEmail) {
         const res = await sendEmailVerification(user, {
-            url: "http://localhost:3000/profile"
+            url: "https://projectclientside.vercel.app/profile"
         });
         console.log(res);
     }
@@ -47,7 +48,7 @@ export const FirebaseProvider = (props) => {
         await updateProfile(user, { displayName });
         if (email !== user.email) {
             verifyBeforeUpdateEmail(user, email, {
-                url: "http://localhost:3000/profile"
+                url: "https://projectclientside.vercel.app/profile"
             })
                 .then(() => {
                     window.alert("Verification sent to provided email.");
@@ -72,8 +73,7 @@ export const FirebaseProvider = (props) => {
                 await axios.get("/users/updateTrips",{
                 headers:{
                     'Content-Type':'application/json'
-                },
-                    withCredentials:true
+                }
                 })
             }
             } else {
@@ -87,7 +87,7 @@ export const FirebaseProvider = (props) => {
         if (token) {
             axios.post('/gettoken', {}, {
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + token,
                 }
             })
                 .then((res) => {
@@ -104,6 +104,8 @@ export const FirebaseProvider = (props) => {
                 setUser,
                 firebaseAuth,
                 upload,
+              loader,
+              setloader,
                 updateProfileWithVerification,
                 verifyEmail,
                 admin,

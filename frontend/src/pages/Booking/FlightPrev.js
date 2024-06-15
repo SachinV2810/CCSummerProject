@@ -4,20 +4,18 @@ import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 const FlightPrev = ({flight}) => {
 
-function extractDateTimeParts(dateTimeStr) {
-  const dateTimeUTC = new Date(dateTimeStr);
-  const dateTimeLocal = new Date(dateTimeUTC.toLocaleString());
-  const date = dateTimeLocal.toLocaleDateString();
-  const time = dateTimeLocal.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  return { date, time };
-}
-
 
 function formatISODate(isoDate) {
-            const date = new Date(isoDate);
-                const options = {  hour: 'numeric', minute: 'numeric', timeZoneName: 'short',hour12:false };
-            return date.toLocaleString('en-IN', options);
-    }
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+   const hours = String(date.getUTCHours()).padStart(2, '0'); 
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); 
+    const formattedDate = `${day} ${month} ${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
      function getTimeDifference(date1, date2) {
         const d1 = new Date(date1);
         const d2 = new Date(date2);
@@ -29,15 +27,15 @@ function formatISODate(isoDate) {
         return `${diffHours}h${diffMinutes}m`;
 }
 
-function getDateTimeParts(flight, type) {
-  if (!flight || !flight[type]) {
-    return { date: '', time: '' }; 
-  }
-  return extractDateTimeParts(flight[type]);
+function getdate(isoDate) {
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+    const formattedDate = `${day} ${month} ${year} `;
+    return formattedDate;
 }
 
-const departedPart = getDateTimeParts(flight, 'departureDateTime');
-const arrivalPart = getDateTimeParts(flight, 'arrivalDateTime');
   return (
     <div className="bg-white shadow-lg shadow-blue-200 basis-1/2 h-max pb-4 w-full pl-4 pr-4 ml-10">
       <div className="font-semibold w-full text-xl"> <FmdGoodIcon color='primary'/> {flight.departureAirport} - {flight.arrivalAirport}</div>
@@ -47,13 +45,13 @@ const arrivalPart = getDateTimeParts(flight, 'arrivalDateTime');
         <span>{flight.seatClass}</span>
     </div>
     <div className="flex justify-between items-center w-full">
-        <span className="bg-blue-200 pr-2 pl-2 rounded">Starts on- <span className="font-medium">{departedPart.date}</span></span>
+        <span className="bg-blue-200 pr-2 pl-2 rounded">Starts on- <span className="font-medium">{getdate(flight.departureDateTime)}</span></span>
         
-        <span className="bg-blue-200 pr-2 pl-2 rounded">Arrive on- <span className="font-medium">{arrivalPart.date}</span></span>
+        <span className="bg-blue-200 pr-2 pl-2 rounded">Arrive on- <span className="font-medium">{getdate(flight.arrivalDateTime)}</span></span>
     </div>
     <div className="flex justify-between w-full items-center">
         <span className="flex flex-col">
-            <span className="font-bold text-lg">{formatISODate(flight.departureDateTime).split("GMT")[0]}</span>
+            <span className="font-bold text-lg">{formatISODate(flight.departureDateTime)}</span>
             <span>{flight.departureAirport}</span>
         </span>
         <span className="w-1/3 bg-slate-500 self-center" style={{height:"0.2px"}}></span>
@@ -61,7 +59,7 @@ const arrivalPart = getDateTimeParts(flight, 'arrivalDateTime');
 
         <span className="w-1/3 bg-slate-500 self-center" style={{height:"0.2px"}}></span>
         <span className="flex flex-col">
-            <span className="font-bold text-lg">{formatISODate(flight.arrivalDateTime).split("GMT")[0]}</span>
+            <span className="font-bold text-lg">{formatISODate(flight.arrivalDateTime)}</span>
             <span className="font-medium">{flight.arrivalAirport}</span>
         </span>
     </div>

@@ -1,14 +1,18 @@
 import { useState } from "react";
-import ResultCard2 from "./ResultCard2";
 import { useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
-import ReviewsCard from "./ReviewsCard";
 const ResultCard = ({flightdata,a,c,w}) => {
     function formatISODate(isoDate) {
-            const date = new Date(isoDate);
-                const options = {hour: 'numeric', minute: 'numeric',hour12:false };
-            return date.toLocaleString('en-US', options);
-    }
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+    const hours = date.getUTCHours();
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); 
+    const formattedDate = `${day} ${month} ${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
     function getTimeDifference(date1, date2) {
         const d1 = new Date(date1);
         const d2 = new Date(date2);
@@ -28,7 +32,7 @@ const ResultCard = ({flightdata,a,c,w}) => {
         navigate(`/flights/review/${flightdata._id}/${a}/${c}`);
     }
   return (
-    <div className="flex flex-wrap justify-center w-1/2 shadow-lg shadow-blue-300 border-2 border-yellow-300  mb-16">
+    <div className="flex flex-wrap justify-center w-3/4  shadow-lg shadow-blue-300 border-2 border-yellow-300  mb-16">
         <div className="w-full pl-24">
             <span className="mr-2">{flightdata.airline}</span>
             <span>{flightdata.flightNumber}</span>
@@ -36,14 +40,14 @@ const ResultCard = ({flightdata,a,c,w}) => {
         <div className="flex w-4/5 items-center justify-around">
             <div className="flex flex-col">
                 <span className="m">{flightdata.departureAirport}</span>
-                <span className="font-semibold text-xl">{formatISODate(flightdata.departureDateTime)}</span>
+                <span className="font-semibold text-md">{formatISODate(flightdata.departureDateTime)}</span>
             </div>
             <div >
                 <span className="font-medium">{getTimeDifference(flightdata.departureDateTime,flightdata.arrivalDateTime)}</span>
             </div>
             <div className="flex flex-col">
                 <span className="m">{flightdata.arrivalAirport}</span>
-                <span className="font-semibold text-xl">{formatISODate(flightdata.arrivalDateTime)}</span>
+                <span className="font-semibold text-md">{formatISODate(flightdata.arrivalDateTime)}</span>
             </div>
             <div >
                 <span className="font-semibold text-xl">&#8377;{flightdata.price.toLocaleString("en-IN")}</span>

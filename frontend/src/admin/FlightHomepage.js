@@ -1,34 +1,57 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../axios";
+import moment from "moment-timezone";
  import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import Header from "./Header";
+import { CircularProgress } from "@mui/material";
 
   
 const FlightHomepage = () => {
 let [flights,setflights]=useState([]);
+const [progress,setprogress]=useState(false);
 function formatISODate(isoDate) {
-            const date = new Date(isoDate);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-            return date.toLocaleString('en-US', options);
-    }
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+    const hours = String(date.getUTCHours()).padStart(2, '0'); 
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); 
+    const formattedDate = `${day} ${month} ${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
 let navigate = useNavigate();
     const getflights=()=>{
+        setprogress(true);
         axios.get("/admin/activeflights",{
             headers:{
                 'Content-Type':'application/json'
-            },
-            withCredentials:true
+            }
         })
         .then((res)=>{
             setflights(res.data);
+            setprogress(false);
         })
         .catch(err=>console.log(err));
     }
     useEffect(()=>{
         getflights();
     },[]);
+
+
+     if(progress){
+        return (
+          <>
+            <Header/>
+            <div className="pt-20 relative top-44 flex justify-center">
+                <CircularProgress/>
+            </div>
+          </>
+        )
+    }
+
   return (
     <div>
       <Header/>

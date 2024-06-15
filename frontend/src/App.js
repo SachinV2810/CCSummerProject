@@ -21,19 +21,24 @@ import Header from "./pages/extras/Header.js";
 import EditFlight from "./admin/EditFlight.js";
 import BookFlights from "./admin/BookFlights.js";
 import TripsPage from "./pages/My Trips/TripsPage.js";
+import { Avatar, LinearProgress } from "@mui/material";
+import Animatedloader from "./Animatedloader.js";
 function App() {
 const firebase=useFirebase()
 const admin=firebase.admin;
   if(firebase.user===null){
     return(
-      <div className="w-full h-screen bg-blue-400/40 flex items-center justify-center">
-        <CircularProgress size={60} color="inherit"></CircularProgress>
+      <div className="w-full h-screen flex items-center justify-center">
+        <Animatedloader src="https://cdn.dribbble.com/users/1186261/screenshots/3718681/_______.gif" alt="...loading"/>
       </div>
       
     )
   }
   return (
     <div className="App">
+     {firebase.loader && <div className="w-full h-screen flex items-center justify-center">
+        <Animatedloader src="https://cdn.dribbble.com/users/1186261/screenshots/3718681/_______.gif" alt="...loading"/>
+      </div>}
       {firebase.user!==0 && admin==false && <Header/>}
       <Routes>
         <Route path="/admin" element={admin?<Admin/>:<Navigate to="/adminlogin"/>}/>

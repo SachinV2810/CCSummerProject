@@ -30,8 +30,7 @@ const BookingSuccess = () => {
   useEffect(() => {
     if (travellerDetails) {
       axios.post("/payment/addbooking", { travellerDetails, flightid1, flightid2, orderId, paymentId, currUser }, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
+        headers: { 'Content-Type': 'application/json' }
       })
       .then((res) => {
         setFlight(res.data.flight);

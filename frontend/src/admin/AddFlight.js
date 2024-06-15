@@ -5,10 +5,12 @@ import { getIdToken } from "firebase/auth";
 import { useFirebase } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import Header from "./Header";
+import { CircularProgress } from "@mui/material";
 
 const AddFlight = () => {
     const firebase=useFirebase()
     const Navigate=useNavigate();
+    const [progress,setprogress]=useState(false);
     const [err,setErr]=useState('');
     const [flight, setFlight] = useState({
         AName: "",
@@ -36,14 +38,15 @@ const AddFlight = () => {
     }
 
     const handleSubmit = (e) => {
+        setprogress(true);
         e.preventDefault();
         axios.post("/admin/addflight",flight,{
             headers:{
                 'Authorization':firebase.token
-            },
-            withCredentials:true
+            }
         })
         .then((res)=>{
+            setprogress(false);
             if(res.status==200){
                 console.log("saved");
                 Navigate("/admin");
@@ -51,10 +54,22 @@ const AddFlight = () => {
         }).
         catch(err=>{
             console.log(err);
+            setprogress(false);
             toast.error(err.response.data.msg,{
                 position:"top-center"
             })
         })
+    }
+
+    if(progress){
+        return (
+          <>
+            <Header/>
+            <div className="pt-20 relative top-44 flex justify-center">
+                <CircularProgress/>
+            </div>
+          </>
+        )
     }
 
     return (

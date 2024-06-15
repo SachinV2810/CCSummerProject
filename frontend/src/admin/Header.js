@@ -8,7 +8,7 @@ const Header = () => {
         <Link to="/admin" className="bg-orange-400 px-4 rounded-xl">Homepage</Link>
       <Link to="/admin/addflight" className="bg-orange-400 px-4 rounded-xl">Add Flight </Link>
       <Link to="/admin/bookedflights" className="bg-orange-400 px-4 rounded-xl"> Booked Flights </Link>
-      {/* <Link to="/admin/users" className="bg-orange-400 px-4 rounded-xl"> All Users</Link> */}
+      <Link to="/admin/users" className="bg-orange-400 px-4 rounded-xl"> All Users</Link>
       <Link className="bg-orange-400 px-4 rounded-xl " onClick={()=>{
       signOut(firebase.firebaseAuth)
       firebase.setadmin(false);

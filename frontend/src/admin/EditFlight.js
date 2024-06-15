@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getIdToken } from "firebase/auth";
 import { useFirebase } from "../firebase";
 import Header from './Header'
+import { CircularProgress } from "@mui/material";
 
 const EditFlight = () => {
     const location=useLocation();
@@ -11,15 +12,16 @@ const EditFlight = () => {
     const firebase=useFirebase();
     const {id}=useParams();
     const {flight}=location.state;
+     const [progress,setprogress]=useState(false);
     const f=flight;
       var date = new Date(f.departureDateTime);
     var date2=new Date(f.arrivalDateTime);
 
-     const curdate=`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+     const curdate=`${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate.toString().padStart(2, '0')}`;
      
-    const curtime=`${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-    const curdate2=`${date2.getFullYear()}-${(date2.getMonth() + 1).toString().padStart(2, '0')}-${date2.getDate().toString().padStart(2, '0')}`;
-    const curtime2=`${date2.getHours().toString().padStart(2, '0')}:${date2.getMinutes().toString().padStart(2, '0')}`;
+    const curtime=`${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`;
+    const curdate2=`${date2.getUTCFullYear()}-${(date2.getUTCMonth() + 1).toString().padStart(2, '0')}-${date2.getUTCDate.toString().padStart(2, '0')}`;
+    const curtime2=`${date2.getUTCHours().toString().padStart(2, '0')}:${date2.getUTCMinutes().toString().padStart(2, '0')}`;
     const [err,setErr]=useState('');
     const [flight2, setFlight] = useState({
         AName: f.airline,
@@ -47,24 +49,37 @@ const EditFlight = () => {
     }
 
     const handleSubmit = (e) => {
+        setprogress(true);
         e.preventDefault();
         axios.post("/admin/editFlight",{flight2,id},{
             headers:{
                 'Content-Type':'application/json', 
                 'Authorization':firebase.token
-            },
-            withCredentials:true
+            }
         })
         .then((res)=>{
             if(res.status==200){
+                setprogress(false);
                 console.log("edited");
                 navigate("/admin");
             }
         }).
         catch(err=>{
+            setprogress(false);
             console.log(err);
             setErr(err.response.data.msg);
         })
+    }
+
+    if(progress){
+        return (
+          <>
+            <Header/>
+            <div className="pt-20 relative top-44 flex justify-center">
+                <CircularProgress/>
+            </div>
+          </>
+        )
     }
 
     return (

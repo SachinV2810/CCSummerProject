@@ -11,19 +11,23 @@ function CompletedCard({trip}) {
     const [text,settext]=useState("");
     const [issubmit,setissubmit]=useState(false);
     function formatISODate(isoDate) {
-            const date = new Date(isoDate);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
-            return date.toLocaleString('en-US', options);
-    }
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getUTCFullYear();
+    const hours = String(date.getUTCHours()).padStart(2, '0'); 
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); 
+    const formattedDate = `${day} ${month} ${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
     const handleSubmit=(e)=>{
         e.preventDefault();
-        console.log({tripid:trip._id,rating,text});
         axios.post("/users/postreview",{tripid:trip._id,rating,text},{
             headers:{
                 'Authorization':firebase.user.uid,
                 'Content-Type':'application/json'
-            },
-            withCredentials:true
+            }
         }).then((res)=>{
             setissubmit(true);
             setreview(false);
@@ -36,10 +40,8 @@ function CompletedCard({trip}) {
             headers:{
                 'Authorization':firebase.user.uid,
                 'Content-Type':'application/json'
-            },
-            withCredentials:true
+            }
         }).then((res)=>{
-            console.log(res.data);
             if(res.data.length){
                 setissubmit(true);
             } 
@@ -47,7 +49,7 @@ function CompletedCard({trip}) {
                 setissubmit(false);
             }
         })
-
+        
     },[issubmit])
   return (
     <div className="flight-card">
@@ -56,17 +58,17 @@ function CompletedCard({trip}) {
           <h2>{trip.flightid.departureAirport} - {trip.flightid.arrivalAirport}</h2>
           <p>{trip.booking?.flight[1]!==null?" Round-Trip ":"One-Way "}  Booking ID - {trip.booking?._id}</p>
         </div>
-        {issubmit?<button className="manage-booking font-bold text-xl">Thanks,for review!</button>:<button className="manage-booking font-bold text-xl" onClick={()=>setreview(!review)}>{!review?"Leave a review":"Hide review"}</button>}
+        {issubmit? <button className="manage-booking font-bold text-xl">Thanks,for review!</button>:<button className="manage-booking font-bold text-xl" onClick={()=>setreview(!review)}>{!review?"Leave a review":"Hide review"}</button>}
       </div>
       <div className="flight-details ">
         <div className="departure">
           <h3>DEPARTURE</h3>
-          <p>{formatISODate(trip.departureDateTime).split("GMT")[0]}</p>
+          <p>{formatISODate(trip.departureDateTime)}</p>
           <p>{trip.flightid.departureAirport}</p>
         </div>
         <div className="arrival">
           <h3>ARRIVAL</h3>
-          <p>{formatISODate(trip.arrivalDateTime).split("GMT")[0]}</p>
+          <p>{formatISODate(trip.arrivalDateTime)}</p>
           <p>{trip.flightid.arrivalAirport}</p>
         </div>
         <div className="airline">
