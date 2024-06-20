@@ -15,7 +15,7 @@
 <p align="left">The airline management and booking app will streamline flight scheduling, seat reservations, and<br>customer interactions. It will include features like real-time flight status updates, secure payment<br>processing, and personalised booking options, enhancing the overall travel experience for users.</p>
 <p align="left"><a href="https://projectclientside.vercel.app">Website Link</a></p>
 <br>
-<p align="left">To test booking you can search flight for 20th june 2024 from New Delhi To Benguluru in Business Class</p>
+<p align="left">To test booking you can search flight for 25th june 2024 from New Delhi To Benguluru in Business Class</p>
 
 ###
 
